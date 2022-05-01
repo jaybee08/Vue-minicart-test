@@ -1049,6 +1049,12 @@
           }
         ],
         "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable",
+        "default": true
       }
     ]
   },
