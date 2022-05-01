@@ -4,7 +4,7 @@
     {% unless template == "product" %}
     <button class="menu-button" @click="toggleMenu">
       <svg class="menu-arrow-icon">{% render 'header-arrow' %}</svg>
-      <span>Menu</span>
+      <span>Vue Menu Drawer</span>
     </button>
     {% else %}
     <a href="javascript:history.back()" class="menu-button">
@@ -19,7 +19,7 @@
       <button class="cart-button">
         <span>
           <template v-if="cart">
-            Cart (${cart.item_count})
+            Vue MiniCart Drawer(${cart.item_count})
           </template>
         </span>
         <svg class="cart-arrow-icon">{% render 'header-arrow' %}</svg>
