@@ -1,0 +1,147 @@
+<div class="main-cart-form">
+  <template v-if="cart && cart.items.length > 0">
+    <div class="mini-cart-rows">
+      <div class="mini-cart-item" v-for="item in cart.items">
+        <div class="mini-cart-image-wrapper" v-if="item.image">
+          <a :href="item.url">
+            <img :src="item.image" :alt="item.title" />
+          </a>
+        </div>
+        <div class="mini-cart-item-right">
+          <div>
+            <a :href="item.url">${ item.title }</a>
+          </div>
+          <div>{{ currency.symbol }} ${ cartMoney(item.price) }</div>
+          <div class="mini-cart-quantity">
+            <input type="text" v-model="item.quantity" />
+            <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+            <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+          </div>
+        </div>
+        <button class="btn" @click="deleteCartItem(item)">remove</button>
+      </div>
+    </div>
+    <div>
+      <div class="checkout-subtotal">
+        <p>Subtotal: </p>
+        <p>{{ currency.symbol }} ${ cartMoney(cart.total_price) }</p>
+      </div>
+    </div>
+  </template>
+
+  <template v-else>
+    <p class="cart-empty">The cart is empty</p>
+  </template>
+</div>
+{{ currency.symbol }}
+<script>
+
+  const CartFormItems = {
+    name: 'Vue main cart page',
+
+    delimiters: ['${', '}'],
+      data() {
+        return{
+          cartData: store.state.cartState,
+        }
+      },
+      computed:{
+            cart_total_price(){
+                let total = 0;
+                
+                this.cartData[0].items.forEach(item => {
+                    total += item.quantity*item.price;
+                });
+
+                return total;
+            },
+            cart(){
+                return this.cartData[0]
+            }
+        },
+      created() {
+       
+      },
+      methods: {
+        getCart(){
+          axios.get('/cart.js')
+            .then( response => {
+                this.cart = response.data;
+              })
+              .catch( error => {
+                console.log(error);
+          });
+        },
+        cartMoney(value) {
+          if (!value) return 0
+          return "Php" + (value/100).toFixed(2)
+        },
+        deleteCartItem(item) {
+          const data = {
+            "id": item.key,
+            "quantity": 0
+          }
+
+          axios.post('/cart/change.js', data)
+            .then(response => {
+              store.getCart()
+            })
+            .catch(error => console.log(error))
+        },
+        decrement(item) {
+          const data = {
+            "id": item.key,
+            "quantity": item.quantity - 1
+          }
+
+          axios.post('/cart/change.js', data)
+            .then(response => {
+              store.getCart()
+            })
+            .catch(error => console.log(error))
+        },
+        increment(item) {
+          const data = {
+            "id": item.key,
+            "quantity": item.quantity + 1
+          }
+
+          axios.post('/cart/change.js', data)
+            .then(response => {
+              store.getCart()
+            })
+            .catch(error => console.log(error))
+        },
+        addToCart(event) {
+          event.preventDefault()
+
+          let selectedVariant
+
+          this.variants.forEach((variant, i) => {
+            if (variant.option1 === this.form.selections[0] && variant.option2 === this.form.selections[1] && variant.option3 === this.form.selections[2]) {
+              selectedVariant = variant
+            }
+          })
+
+          let data = {
+            id: selectedVariant.id,
+            quantity: 1
+          }
+
+          axios.post('/cart/add.js', data)
+            .then((response) => {
+              store.getCart()
+            })
+            .then(() => {
+              toggleMiniCart.openCart()
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      }
+  }
+
+  const CartForm = Vue.createApp(CartFormItems).mount('.main-cart-form');
+
+</script>
