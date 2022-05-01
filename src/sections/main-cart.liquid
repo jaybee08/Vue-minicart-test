@@ -74,7 +74,7 @@
         },
         cartMoney(value) {
           if (!value) return 0
-          return "Php" + (value/100).toFixed(2)
+          return "Php" + (value/100).toLocaleString()
         },
         deleteCartItem(item) {
           const data = {
