@@ -48,7 +48,18 @@
 	 color: white;
 }
 /* START VARIABLES */
-@font-face {font-family: "Ogg"; src: url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.eot"); src: url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.woff") format("woff"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.svg#Ogg") format("svg"); }
+ @font-face {
+	 font-family: "HelveticaNeueLTProBold";
+	 src: url('{{ "HelveticaNeueLTPro-Bd.woff2" | asset_url }}') format("woff2");
+}
+@font-face {font-family: "Ogg"; 
+	src: url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.eot"); 
+	src: url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.woff") format("woff"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/2596224269750e00c3ad5356299a3b9f.svg#Ogg") format("svg"); 
+}
+@font-face {
+	font-family: "Avenir";
+	src: url('{{ "AvenirLTStd-Roman.otf" | asset_url }}') format("otf");
+}
 
 /* START PRESETS */
  .container, .footer, .header {
@@ -58,8 +69,14 @@
 	 font-weight: 700;
 	 font-size: 16px;
 	 line-height: 1.25;
-	 font-family: "Ogg";
+	 font-family: "HelveticaNeueLTProBold", Helvetica, Arial, sans-serif;
 	 -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4,h5,h6{
+	font-family: "Ogg";
+}
+h2{
+	font-size: 2rem;
 }
  main {
 	 padding-top: 72px;
@@ -410,6 +427,14 @@
 }
  .product-option-item:hover {
 	 background: #ededed;
+}
+
+/* START MAIN CART */
+.main-cart-form{
+	font-size: 18px;
+}
+.main-cart-form-header{
+	text-align: center;
 }
 /* START MINI CART */
  .mini-cart.hidden {

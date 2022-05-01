@@ -111,7 +111,8 @@
       "or": "or",
       "checkout": "Check out",
       "continue": "Continue shopping",
-      "backorder": "Product is backordered and will ship as soon as it is back in stock."
+      "backorder": "Product is backordered and will ship as soon as it is back in stock.",
+      "note": "Cart note"
     },
     "label": {
       "product": "Product",

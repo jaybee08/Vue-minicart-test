@@ -1,43 +1,95 @@
-<div class="main-cart-form">
-  <div class="main-cart-form-header">
-    <h2>Cart</h2>
-    <p>continue shopping</p>
-  </div>
-  <template v-if="cart && cart.items.length > 0">
-    <div class="mini-cart-rows">
-      <div class="mini-cart-item" v-for="item in cart.items">
-        <div class="mini-cart-image-wrapper" v-if="item.image">
-          <a :href="item.url">
-            <img :src="item.image" :alt="item.title" />
-          </a>
-        </div>
-        <div class="mini-cart-item-right">
-          <div>
-            <a :href="item.url">${ item.title }</a>
-          </div>
-          <div>{{ currency.symbol }} ${ cartMoney(item.price) }</div>
-          <div class="mini-cart-quantity">
-            <input type="text" v-model="item.quantity" />
-            <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
-            <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
-          </div>
-        </div>
-        <button class="btn" @click="deleteCartItem(item)">remove</button>
-      </div>
-    </div>
-    <div>
-      <div class="checkout-subtotal">
-        <p>Subtotal: </p>
-        <p>{{ currency.symbol }} ${ cartMoney(cart.total_price) }</p>
-      </div>
-    </div>
-  </template>
 
-  <template v-else>
-    <p class="cart-empty">The cart is empty</p>
-  </template>
+<div class="main-cart-form">
+  <table class="main-cart-flex-table">
+    <thead class="small--hide">
+      <tr class="border-bottom">
+        <th>{{ 'cart.label.product' | t }}</th>
+        <th>{{ 'cart.label.price' | t }}</th>
+        <th>{{ 'cart.label.quantity' | t }}</th>
+        <th>{{ 'cart.label.total' | t }}</th>
+      </tr>
+    </thead>
+      <tbody>
+        <!-- if cart has loaded and has items -->
+        <template v-if="cart">
+          <template v-for="(item, index) in cart.items">
+            <tr class="flex-table-row">
+              <td data-label="{{ 'customer.order.product' | t }}">
+                 <div class="product-col-flex">
+                   <div class="img">
+                      <template v-if="item.image">
+                         <a :href="item.url">
+                            <img class="img-fluid mr-4" width="150" :src="item.image" alt="">
+                           </a>
+                       </template>
+                  </div>
+
+                  <div class="title">
+                     <a :href="item.url">${ item.title }</a>
+                        <template v-if="!item.product_has_only_default_variant">
+                           <p>${ item.variant_title }</p>
+                        </template>
+                                      
+                        <template v-if="item.properties">
+                          <template v-for="p in item.properties">
+                             <template  v-if="p.first">
+                                ${ p.first}
+                                 <template v-if="p.last.includes('/uploads/')">
+                                     <a :href="p.last"> ${p.last.split('/').pop()} </a>
+                                 </template>
+                                 <template v-else>
+                                  ${p.last}
+                                  </template>
+                              </template>
+                          </template>
+                      </template> <!-- endif item.properties -->
+                      
+                  </div>  <!-- title -->
+                 </div>
+              </td>
+                        
+                        <td data-label="{{ 'cart.label.price' | t }}">
+                          <template v-if="item.original_line_price != item.line_price">
+                            <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
+                            <div>${ cartMoney(item.price) }</div>
+                            <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
+                            <div>${ cartMoney(item.price) }</div>
+                          </template>
+
+                          <template v-else>
+                                ${cartMoney(item.price) }
+                          </template>
+
+                        </td>
+                        <td data-label="{{ 'cart.label.quantity' | t }}">
+                          <div class="mini-cart-quantity">
+                            <input type="text" v-model="item.quantity" />
+                            <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+                            <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+                          </div>
+                        </td>
+                        <td id="cart_item_price" data-label="{{ 'cart.label.total' | t }}">
+                          <p>${ cartMoney(item.price * item.quantity) }</p>
+                        </td>
+                      </tr>
+        
+                    </template>
+
+              </template>
+
+            </tbody>
+  
+    </table>
+    <p>Subtotal: </p>
+    <p>${ cartMoney(cart.total_price) }</p>
+    
+    {% if settings.cart_notes_enable %}
+    <label class="form-label" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
+    <textarea class="form-control" name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
+{% endif %}
+
 </div>
-{{ currency.symbol }}
+
 <script>
 
   const CartFormItems = {
@@ -50,35 +102,14 @@
         }
       },
       computed:{
-            cart_total_price(){
-                let total = 0;
-                
-                this.cartData[0].items.forEach(item => {
-                    total += item.quantity*item.price;
-                });
-
-                return total;
-            },
-            cart(){
-                return this.cartData[0]
-            }
-        },
-      created() {
-       
+        cart(){
+          return this.cartData[0];
+        }
       },
       methods: {
-        getCart(){
-          axios.get('/cart.js')
-            .then( response => {
-                this.cart = response.data;
-              })
-              .catch( error => {
-                console.log(error);
-          });
-        },
         cartMoney(value) {
           if (!value) return 0
-          return "Php" + (value/100).toLocaleString()
+          return "$" + (value/100).toLocaleString()
         },
         deleteCartItem(item) {
           const data = {
@@ -114,36 +145,9 @@
             .then(response => {
               store.getCart()
             })
-            .catch(error => console.log(error))
-        },
-        addToCart(event) {
-          event.preventDefault()
-
-          let selectedVariant
-
-          this.variants.forEach((variant, i) => {
-            if (variant.option1 === this.form.selections[0] && variant.option2 === this.form.selections[1] && variant.option3 === this.form.selections[2]) {
-              selectedVariant = variant
-            }
-          })
-
-          let data = {
-            id: selectedVariant.id,
-            quantity: 1
-          }
-
-          axios.post('/cart/add.js', data)
-            .then((response) => {
-              store.getCart()
-            })
-            .then(() => {
-              toggleMiniCart.openCart()
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        }
+            .catch(error => console.log(error));
       }
+    }
   }
 
   const CartForm = Vue.createApp(CartFormItems).mount('.main-cart-form');

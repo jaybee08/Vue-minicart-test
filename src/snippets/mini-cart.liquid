@@ -11,7 +11,7 @@
           <div>
             <a :href="item.url">${ item.title }</a>
           </div>
-          <div>${ money(item.price) }</div>
+          <div>${ money(item.price * item.quantity) }</div>
           <div class="mini-cart-quantity">
             <input type="text" v-model="item.quantity" />
             <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
@@ -32,4 +32,8 @@
   <template v-else>
     <p class="cart-empty">The cart is empty</p>
   </template>
+  {% if settings.cart_notes_enable %}
+        <label class="form-label" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
+        <textarea class="form-control" name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
+  {% endif %}
 </div>
