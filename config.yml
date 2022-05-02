@@ -1,7 +1,0 @@
-
-development:
-  password: shptka_e91294e76e92c8240bbb191109a9fee3
-  theme_id: "130588737715"
-  store: tas-devtest.myshopify.com
-  ignore_files:
-  - settings_data.json
