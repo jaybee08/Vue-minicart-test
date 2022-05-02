@@ -43,7 +43,7 @@
         <div class="product-line-price-mobile">
           <div>${ cartMoney(item.price * item.quantity) }</div>
         </div>
-        <button aria-label="remove" class="button-remove text-uppercase" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button> 
+        <button aria-label="remove" class="button-remove text-uppercase" type="button" @click="deleteCartItem(item)">{{'cart.general.remove' | t }}{% render 'svg-x' %}</button> 
       </div>
     </div>
     <div class="product-price">
@@ -64,11 +64,9 @@
         <button aria-label="decrement" class="mini-cart-quantity-button" @click="increment(item)">+</button>
        </div>
     </div>
-
     <div class="product-line-price">
       <div class="push-down">${ cartMoney(item.price * item.quantity) }</div>
     </div>
-  
   </div>
 </template>
 <div class="main-cart-form_bottom">
@@ -94,10 +92,8 @@
 </div>
 </template>
 <template v-else>
-  <p class="cart-empty">The cart is empty</p>
+  <p class="cart-empty">{{ 'cart.general.empty' | t }}</p>
 </template>
-
-
 </div>
 
 <script>
