@@ -115,6 +115,18 @@
         }
       },
       methods: {
+        updateCart(){
+        let result = this.cart.items.reduce(
+            (accumulator, target) => ({ ...accumulator, [target.variant_id]: target.quantity }),
+        {});
+        axios.post('/cart/update.js', {updates : result} )
+            .then( (response) => {
+                store.getCart()
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+        },
         cartMoney(value) {
           if (!value) return 0
           return "$" + (value/100).toLocaleString()
