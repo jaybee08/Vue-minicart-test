@@ -9,7 +9,7 @@
         </div>
         <div class="mini-cart-item-right">
           <div>
-            <a :href="item.url">${ item.title }</a>
+            <a :href="item.url">${ item.product_title }</a>
           </div>
           <template v-if="!item.product_has_only_default_variant">
             <p class="variant-title">${ item.variant_title }</p>
