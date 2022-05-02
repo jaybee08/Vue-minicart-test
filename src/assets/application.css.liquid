@@ -50,7 +50,6 @@
 .text-uppercase{
 	text-transform: uppercase;
 }
-
 /* START VARIABLES */
  @font-face {
 	 font-family: "HelveticaNeueLTProBold";
@@ -445,6 +444,9 @@ h2{
 .main-cart-flex-table{
 	width: 100%;
 }
+.main-cart-flex-table thead{
+	visibility: hidden;
+}
 .main-cart-flex-table th{ 
 	text-align: center;
 }
@@ -491,6 +493,7 @@ h2{
     position: relative;
     top: 3.8rem;
     width: 190px;
+	display: none;
 }
 .flex-table-row .product-col-flex .title .btn svg{
 	width: 16px;
@@ -1058,11 +1061,17 @@ h2{
 	text-align: center;
   }
   
+  
   @media screen and (min-width: 750px) {
+	.flex-table-row .product-col-flex .title .btn{
+		display: block;
+	}
+	.main-cart-flex-table thead{
+		visibility: visible;
+	}
 	.cart-note {
 	  max-width: 35rem;
 	}
-  
 	.cart__update-button {
 	  margin-bottom: 0;
 	  margin-right: 0.8rem;
