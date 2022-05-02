@@ -44,7 +44,8 @@
   </div>
 
   <div class="mini-cart" :class="{ hidden: miniCart }">
-    <button class="mini-cart-close-button" @click="toggleMiniCart">Close</button>
+    <label>{{ 'cart.label.cart' | t }}</label>
+    <button class="mini-cart-close-button" @click="toggleMiniCart">{% render 'svg-x' %}</button>
     {% render 'mini-cart' %}
   </div>
   <div class="outside" v-if="!miniCart || !menuDrawer" @click="closeAllDrawers"></div>
