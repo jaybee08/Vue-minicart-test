@@ -4,6 +4,7 @@
     <h1>{{ 'cart.label.cart' | t }}</h1>
     <a href="/collections/all">{{ 'cart.general.continue' | t }}</a>
   </div>
+  <template v-if="cart && cart.items.length > 0">
   <div class="column-labels">
     <label class="product-image">{{ 'cart.label.image' | t }}</label>
     <label class="product-details">{{ 'cart.label.product' | t }}</label>
@@ -11,7 +12,6 @@
     <label class="product-quantity">{{ 'cart.label.quantity' | t }}</label>
     <label class="product-line-price">{{ 'cart.label.total' | t }}</label>
   </div>
-  <template v-if="cart">
     <template v-for="(item, index) in cart.items">
   <div class="product">
     <div class="product-image">
@@ -71,8 +71,6 @@
   
   </div>
 </template>
-</template>
-
 <div class="main-cart-form_bottom">
   <div class="box-wrap order-note">
     {% if settings.cart_notes_enable %}
@@ -83,7 +81,7 @@
   <div class="box-wrap subtotal">
     <div class="subtotal-flex">
       <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.subtotal' | t }}:</label>
-      <p>${ cartMoney(cart_total_price) }</p>
+      <p>${ cartMoney(cart.total_price) }</p>
     </div>
     <div class="checkout">
       <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
@@ -94,6 +92,11 @@
     </div>
   </div>
 </div>
+</template>
+<template v-else>
+  <p class="cart-empty">The cart is empty</p>
+</template>
+
 
 </div>
 
@@ -109,15 +112,7 @@
       computed:{
         cart() {
           return this.cartData[0];
-        },
-        cart_total_price() {
-            let total = 0;
-            const items = this.cart.items;
-            items.forEach(item => {
-            total += item.quantity*item.price;
-           });
-          return total;
-         }
+        }
       },
       methods: {
         cartMoney(value) {
