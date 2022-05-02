@@ -121,7 +121,8 @@
       "total": "Total",
       "decrease": "Decrease",
       "increase": "Increase",
-      "note": "Add a note to your order"
+      "note": "Add a note to your order",
+      "cart": "Cart"
     },
     "shipping_calculator": {
       "button_hide": "Hide shipping calculator",

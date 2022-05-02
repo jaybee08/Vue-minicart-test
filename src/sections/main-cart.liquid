@@ -1,101 +1,101 @@
+
 <div class="main-cart-form">
   <div class="main-cart-form-headings">
-    <h2>Cart</h2>
-    <p>continue shopping</p>
+    <h1>{{ 'cart.label.cart' | t }}</h1>
+    <a href="/collections/all">{{ 'cart.general.continue' | t }}</a>
   </div>
-  <table class="main-cart-flex-table">
-    <thead class="small--hide">
-      <tr class="border-bottom">
-        <th></th>
-        <th>{{ 'cart.label.price' | t }}</th>
-        <th>{{ 'cart.label.quantity' | t }}</th>
-        <th>{{ 'cart.label.total' | t }}</th>
-      </tr>
-    </thead>
-      <tbody>
-        <!-- if cart has loaded and has items -->
-        <template v-if="cart">
-          <template v-for="(item, index) in cart.items">
-            <tr class="flex-table-row">
-              <td data-label="{{ 'customer.order.product' | t }}">
-                 <div class="product-col-flex flex">
-                   <div class="img">
-                   <template v-if="item.image">
-                    <a :href="item.url">
-                      <img width="150" :src="item.image" alt="">
-                    </a>
+  <div class="column-labels">
+    <label class="product-image">{{ 'cart.label.image' | t }}</label>
+    <label class="product-details">{{ 'cart.label.product' | t }}</label>
+    <label class="product-price">{{ 'cart.label.price' | t }}</label>
+    <label class="product-quantity">{{ 'cart.label.quantity' | t }}</label>
+    <label class="product-line-price">{{ 'cart.label.total' | t }}</label>
+  </div>
+  <template v-if="cart">
+    <template v-for="(item, index) in cart.items">
+  <div class="product">
+    <div class="product-image">
+      <template v-if="item.image">
+        <a :href="item.url">
+          <img :src="item.image" :alt="item.title">
+        </a>
+       </template>
+    </div>
+    <div class="product-details">
+      <div class="product-title">
+        <a :href="item.url">${ item.title }</a>
+          <template v-if="!item.product_has_only_default_variant">
+            <p class="variant-title">${ item.variant_title }</p>
+          </template> 
+          <template v-if="item.properties">
+            <template v-for="p in item.properties">
+               <template  v-if="p.first">
+                  ${ p.first}
+                   <template v-if="p.last.includes('/uploads/')">
+                       <a :href="p.last"> ${p.last.split('/').pop()} </a>
                    </template>
-                  </div>
-                  <div class="title">
-                     <a :href="item.url">${ item.title }</a>
-                        <template v-if="!item.product_has_only_default_variant">
-                           <p class="variant-title">${ item.variant_title }</p>
-                        </template>       
-                        <template v-if="item.properties">
-                          <template v-for="p in item.properties">
-                             <template  v-if="p.first">
-                                ${ p.first}
-                                 <template v-if="p.last.includes('/uploads/')">
-                                     <a :href="p.last"> ${p.last.split('/').pop()} </a>
-                                 </template>
-                                 <template v-else>
-                                  ${p.last}
-                                  </template>
-                              </template>
-                          </template>
-                      </template>
-                      <button class="button btn" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button>
-                   </div>
-                 </div>
-              </td>
-              <td data-label="{{ 'cart.label.price' | t }}">
-                <template v-if="item.original_line_price != item.line_price">
-                <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
-                <div>${ cartMoney(item.price) }</div>
-                <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
-                <div>${ cartMoney(item.price) }</div>
+                   <template v-else>
+                    ${p.last}
+                    </template>
                 </template>
-                <template v-else>
-                 <div class="push-down">${cartMoney(item.price) }</div> 
-                </template>
-              </td>
-              <td data-label="{{ 'cart.label.quantity' | t }}">
-               <div class="mini-cart-quantity push-down">
-                <input type="text" v-model="item.quantity" />
-                <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
-                <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
-                </div>
-               </td>
-               <td id="cart_item_price" data-label="{{ 'cart.label.total' | t }}">
-                <div class="push-down">${ cartMoney(item.price * item.quantity) }</div>
-               </td>
-            </tr>
-          </template>
-         </template>
-      </tbody>
-  </table>
-  <div class="main-cart-form_bottom flex">
-    <div class="split-half order-note">
-      {% if settings.cart_notes_enable %}
-       <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label><br>
-        <textarea class="form-control" name="note" id="CartSpecialInstructions" placeholder="Ex. Thank you">{{ cart.note }}</textarea>
-    {% endif %}
-    </div>
-    <div class="split-half subtotal">
-      <div class="subtotal-flex">
-        <p class="text-uppercase">{{ 'cart.general.subtotal' | t }}: </p>
-        <p>${ cartMoney(cart_total_price) }</p>
-      </div>
-      <div class="checkout">
-        <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
-        <div class="button-flex">
-          <button @click="updateCart" name="update" class="update-button">{{ 'cart.general.update' | t }}</button>
-          <a href="/checkout" class="checkout-button">{{ 'cart.general.checkout' | t }}</a>
+            </template>
+        </template>
+        <div class="product-line-price-mobile">
+          <div>${ cartMoney(item.price * item.quantity) }</div>
         </div>
+        <button class="button-remove text-uppercase" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button> 
+      </div>
+    </div>
+    <div class="product-price">
+      <template v-if="item.original_line_price != item.line_price">
+        <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
+        <div>${ cartMoney(item.price) }</div>
+        <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
+        <div>${ cartMoney(item.price) }</div>
+        </template>
+        <template v-else>
+         <div class="price push-down">${cartMoney(item.price) }</div> 
+        </template>
+    </div>
+    <div class="product-quantity">
+      <div class="mini-cart-quantity push-down">
+        <input type="text" v-model="item.quantity" />
+        <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+        <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+       </div>
+    </div>
+
+    <div class="product-line-price">
+      <div class="push-down">${ cartMoney(item.price * item.quantity) }</div>
+    </div>
+  
+  </div>
+</template>
+</template>
+
+<div class="main-cart-form_bottom">
+  <div class="box-wrap order-note">
+    {% if settings.cart_notes_enable %}
+     <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label><br>
+      <textarea class="form-control" name="note" id="CartSpecialInstructions" placeholder="Ex. Thank you">{{ cart.note }}</textarea>
+  {% endif %}
+  </div>
+  <div class="box-wrap subtotal">
+    <div class="subtotal-flex">
+      <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.subtotal' | t }}:</label>
+      <p>${ cartMoney(cart_total_price) }</p>
+    </div>
+    <div class="checkout">
+      <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+      <div class="button-flex">
+        <button @click="updateCart" name="update" class="update-button text-uppercase">{{ 'cart.general.update' | t }}</button>
+        <a href="/checkout" class="checkout-button text-uppercase">{{ 'cart.general.checkout' | t }}</a>
       </div>
     </div>
   </div>
-</div><!-- end .main-cart-form -->
+</div>
+
+</div>
 
 <script>
   const CartFormItems = {
