@@ -17,8 +17,8 @@
           <div class="flex mini-cart-drawer">
             <div class="mini-cart-quantity">
             <input type="text" v-model="item.quantity" />
-            <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
-            <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+            <button aria-label="decrement" class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+            <button aria-label="increment" class="mini-cart-quantity-button" @click="increment(item)">+</button>
           </div>
             <div class="item-total">${ money(item.price * item.quantity) }</div>
           </div>

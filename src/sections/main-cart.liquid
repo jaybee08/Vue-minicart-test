@@ -43,7 +43,7 @@
         <div class="product-line-price-mobile">
           <div>${ cartMoney(item.price * item.quantity) }</div>
         </div>
-        <button class="button-remove text-uppercase" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button> 
+        <button aria-label="remove" class="button-remove text-uppercase" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button> 
       </div>
     </div>
     <div class="product-price">
@@ -60,8 +60,8 @@
     <div class="product-quantity">
       <div class="mini-cart-quantity push-down">
         <input type="text" v-model="item.quantity" />
-        <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
-        <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+        <button aria-label="increment" class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+        <button aria-label="decrement" class="mini-cart-quantity-button" @click="increment(item)">+</button>
        </div>
     </div>
 
@@ -88,7 +88,7 @@
     <div class="checkout">
       <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
       <div class="button-flex">
-        <button @click="updateCart" name="update" class="update-button text-uppercase">{{ 'cart.general.update' | t }}</button>
+        <button aria-label="update" @click="updateCart" name="update" class="update-button text-uppercase">{{ 'cart.general.update' | t }}</button>
         <a href="/checkout" class="checkout-button text-uppercase">{{ 'cart.general.checkout' | t }}</a>
       </div>
     </div>
