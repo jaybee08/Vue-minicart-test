@@ -26,7 +26,6 @@
       created() {
         axios.get("/products/{{ product.handle }}.js")
           .then(results => {
-            console.log(results)
             this.form.options = results.data.options.map(item => ({...item, visible: false}))
             this.variants = results.data.variants
             results.data.options.map(item => this.selected.push(item.values[0]))

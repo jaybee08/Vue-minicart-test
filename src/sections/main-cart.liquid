@@ -1,9 +1,12 @@
-
 <div class="main-cart-form">
+  <div class="main-cart-form-headings">
+    <h2>Cart</h2>
+    <p>continue shopping</p>
+  </div>
   <table class="main-cart-flex-table">
     <thead class="small--hide">
       <tr class="border-bottom">
-        <th>{{ 'cart.label.product' | t }}</th>
+        <th></th>
         <th>{{ 'cart.label.price' | t }}</th>
         <th>{{ 'cart.label.quantity' | t }}</th>
         <th>{{ 'cart.label.total' | t }}</th>
@@ -15,21 +18,19 @@
           <template v-for="(item, index) in cart.items">
             <tr class="flex-table-row">
               <td data-label="{{ 'customer.order.product' | t }}">
-                 <div class="product-col-flex">
+                 <div class="product-col-flex flex">
                    <div class="img">
-                      <template v-if="item.image">
-                         <a :href="item.url">
-                            <img class="img-fluid mr-4" width="150" :src="item.image" alt="">
-                           </a>
-                       </template>
+                   <template v-if="item.image">
+                    <a :href="item.url">
+                      <img width="150" :src="item.image" alt="">
+                    </a>
+                   </template>
                   </div>
-
                   <div class="title">
                      <a :href="item.url">${ item.title }</a>
                         <template v-if="!item.product_has_only_default_variant">
-                           <p>${ item.variant_title }</p>
-                        </template>
-                                      
+                           <p class="variant-title">${ item.variant_title }</p>
+                        </template>       
                         <template v-if="item.properties">
                           <template v-for="p in item.properties">
                              <template  v-if="p.first">
@@ -42,59 +43,63 @@
                                   </template>
                               </template>
                           </template>
-                      </template> <!-- endif item.properties -->
-                      
-                  </div>  <!-- title -->
+                      </template>
+                      <button class="button btn" type="button" @click="deleteCartItem(item)">remove{% render 'svg-x' %}</button>
+                   </div>
                  </div>
               </td>
-                        
-                        <td data-label="{{ 'cart.label.price' | t }}">
-                          <template v-if="item.original_line_price != item.line_price">
-                            <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
-                            <div>${ cartMoney(item.price) }</div>
-                            <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
-                            <div>${ cartMoney(item.price) }</div>
-                          </template>
-
-                          <template v-else>
-                                ${cartMoney(item.price) }
-                          </template>
-
-                        </td>
-                        <td data-label="{{ 'cart.label.quantity' | t }}">
-                          <div class="mini-cart-quantity">
-                            <input type="text" v-model="item.quantity" />
-                            <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
-                            <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
-                          </div>
-                        </td>
-                        <td id="cart_item_price" data-label="{{ 'cart.label.total' | t }}">
-                          <p>${ cartMoney(item.price * item.quantity) }</p>
-                        </td>
-                      </tr>
-        
-                    </template>
-
-              </template>
-
-            </tbody>
-  
-    </table>
-    <p>Subtotal: </p>
-    <p>${ cartMoney(cart.total_price) }</p>
-    
-    {% if settings.cart_notes_enable %}
-    <label class="form-label" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
-    <textarea class="form-control" name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
-{% endif %}
-
-</div>
+              <td data-label="{{ 'cart.label.price' | t }}">
+                <template v-if="item.original_line_price != item.line_price">
+                <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
+                <div>${ cartMoney(item.price) }</div>
+                <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
+                <div>${ cartMoney(item.price) }</div>
+                </template>
+                <template v-else>
+                 <div class="push-down">${cartMoney(item.price) }</div> 
+                </template>
+              </td>
+              <td data-label="{{ 'cart.label.quantity' | t }}">
+               <div class="mini-cart-quantity push-down">
+                <input type="text" v-model="item.quantity" />
+                <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
+                <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
+                </div>
+               </td>
+               <td id="cart_item_price" data-label="{{ 'cart.label.total' | t }}">
+                <div class="push-down">${ cartMoney(item.price * item.quantity) }</div>
+               </td>
+            </tr>
+          </template>
+         </template>
+      </tbody>
+  </table>
+  <div class="main-cart-form_bottom flex">
+    <div class="split-half order-note">
+      {% if settings.cart_notes_enable %}
+       <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label><br>
+        <textarea class="form-control" name="note" id="CartSpecialInstructions" placeholder="Ex. Thank you">{{ cart.note }}</textarea>
+    {% endif %}
+    </div>
+    <div class="split-half subtotal">
+      <div class="subtotal-flex">
+        <p class="text-uppercase">{{ 'cart.general.subtotal' | t }}: </p>
+        <p>${ cartMoney(cart_total_price) }</p>
+      </div>
+      <div class="checkout">
+        <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+        <div class="button-flex">
+          <button @click="updateCart" name="update" class="update-button">{{ 'cart.general.update' | t }}</button>
+          <a href="/checkout" class="checkout-button">{{ 'cart.general.checkout' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- end .main-cart-form -->
 
 <script>
-
   const CartFormItems = {
     name: 'Vue main cart page',
-
     delimiters: ['${', '}'],
       data() {
         return{
@@ -102,9 +107,17 @@
         }
       },
       computed:{
-        cart(){
+        cart() {
           return this.cartData[0];
-        }
+        },
+        cart_total_price() {
+            let total = 0;
+            const items = this.cart.items;
+            items.forEach(item => {
+            total += item.quantity*item.price;
+           });
+          return total;
+         }
       },
       methods: {
         cartMoney(value) {
@@ -135,7 +148,7 @@
             })
             .catch(error => console.log(error))
         },
-        increment(item) {
+        increment(item) { 
           const data = {
             "id": item.key,
             "quantity": item.quantity + 1
@@ -149,7 +162,5 @@
       }
     }
   }
-
   const CartForm = Vue.createApp(CartFormItems).mount('.main-cart-form');
-
 </script>
