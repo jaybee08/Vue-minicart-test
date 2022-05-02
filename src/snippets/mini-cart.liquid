@@ -1,6 +1,6 @@
 <div class="cart-form">
   <template v-if="cart && cart.items.length > 0">
-    <div class="mini-cart-rows">
+    <div class="mini-cart-rows cart-drawer">
       <div class="mini-cart-item" v-for="item in cart.items">
         <div class="mini-cart-image-wrapper" v-if="item.image">
           <a :href="item.url">
@@ -11,29 +11,38 @@
           <div>
             <a :href="item.url">${ item.title }</a>
           </div>
-          <div>${ money(item.price * item.quantity) }</div>
-          <div class="mini-cart-quantity">
+          <template v-if="!item.product_has_only_default_variant">
+            <p class="variant-title">${ item.variant_title }</p>
+          </template> 
+          <div class="flex mini-cart-drawer">
+            <div class="mini-cart-quantity">
             <input type="text" v-model="item.quantity" />
             <button class="mini-cart-quantity-button" @click="decrement(item)">-</button>
             <button class="mini-cart-quantity-button" @click="increment(item)">+</button>
           </div>
+            <div class="item-total">${ money(item.price * item.quantity) }</div>
+          </div>
+        </div>
+      </div>
+      <div class="mini-cart-order-note">
+        {% if settings.cart_notes_enable %}
+         <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label><br>
+          <textarea class="form-control" name="note" id="CartSpecialInstructions" placeholder="Ex. Thank you">{{ cart.note }}</textarea>
+      {% endif %}
+      </div>
+      <div class="mini-cart-drawer-checkout">
+        <div class="subtotal">
+        <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.subtotal' | t }}:</label>
+        <p>${ money(cart.total_price) }</p>
+        </div>
+        <p>{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+        <div class="button-flex">
+        <a href="/checkout" class="checkout-button text-uppercase">{{ 'cart.general.checkout' | t }}</a>
         </div>
       </div>
     </div>
-    <div>
-      <div class="checkout-subtotal">
-        <p>Subtotal: </p>
-        <p>${ money(cart.total_price) }</p>
-      </div>
-      <a href="/checkout" class="checkout-button">Checkout</a>
-    </div>
   </template>
-
   <template v-else>
     <p class="cart-empty">The cart is empty</p>
   </template>
-  {% if settings.cart_notes_enable %}
-        <label class="form-label" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
-        <textarea class="form-control" name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
-  {% endif %}
 </div>
