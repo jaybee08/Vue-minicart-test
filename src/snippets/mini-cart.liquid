@@ -26,7 +26,7 @@
       </div>
       <div class="mini-cart-order-note">
         {% if settings.cart_notes_enable %}
-         <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label><br>
+         <label class="form-label text-uppercase" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
           <textarea class="form-control" name="note" id="CartSpecialInstructions" placeholder="Ex. Thank you">{{ cart.note }}</textarea>
       {% endif %}
       </div>
